@@ -11,11 +11,31 @@ import AssignmentRoutes from './Kambaz/Assignments/routes.js';
 import EnrollmentRoutes from './Kambaz/Enrollments/routes.js';
 
 const app = express();
+
+// configure for branch deploys
+const allowedOrigins = [
+    process.env.NETLIFY_URL,
+    'https://a5--brilliant-malabi-5a64e6.netlify.app',
+    'http://localhost:5173'
+];
+
 app.use(cors({
     credentials: true,
-    origin: process.env.NETLIFY_URL || "http://localhost:5173",
-    })
-);
+    origin: (origin, callback) => {
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+        } else {
+        return callback(new Error("Not allowed by CORS"));
+        }
+    }
+}));
+
+// app.use(cors({
+//     credentials: true,
+//     origin: process.env.NETLIFY_URL || "http://localhost:5173",
+//     })
+// );
 const sessionOptions = {
     secret: process.env.SESSION_SECRET || "kambaz",
     resave: false,
