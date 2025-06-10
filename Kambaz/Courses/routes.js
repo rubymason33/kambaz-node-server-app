@@ -1,5 +1,7 @@
 import * as dao from "./dao.js";
 import * as modulesDao from "../Modules/dao.js";
+import db from "../Database/index.js";
+
 export default function CourseRoutes(app) {
     app.get("/api/courses", (req, res) => {
         const courses = dao.findAllCourses();
@@ -30,9 +32,23 @@ export default function CourseRoutes(app) {
         const newModule = modulesDao.createModule(module);
         res.send(newModule);
     });
-
-
-
-
+    app.get("/api/courses/:courseId/home", (req, res) => {
+        const { courseId } = req.params;
+        const userId = req.session?.currentUser?._id;
+        if (!userId) {
+            return res.status(401).json({ message: "Not authenticated" });
+        }
+        const isEnrolled = db.enrollments.some(
+            (e) => e.user === userId && e.course === courseId
+        );
+        if (!isEnrolled) {
+            return res.status(403).json({ message: "Access denied" });
+        }
+        const course = db.courses.find(c => c._id === courseId);
+        if (!course) {
+            return res.status(404).json({ message: "Course not found" });
+        }
+        res.json(course);
+    });
 }
 
