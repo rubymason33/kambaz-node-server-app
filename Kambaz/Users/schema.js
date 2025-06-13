@@ -13,9 +13,9 @@ const userSchema = new mongoose.Schema({
     default: "USER",
     },
     loginId: String,
-    // section: String,
-    // lastActivity: Date,
-    // totalActivity: String,
+    section: String,
+    lastActivity: Date,
+    totalActivity: String,
     },
     { collection: "users" }
 );
