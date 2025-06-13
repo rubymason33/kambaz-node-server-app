@@ -20,7 +20,8 @@ const app = express();
 const allowedOrigins = [
     process.env.NETLIFY_URL,
     'https://a5--brilliant-malabi-5a64e6.netlify.app',
-    'http://localhost:5173'
+    'http://localhost:5173',
+    'https://a6--brilliant-malabi-5a64e6.netlify.app'
 ];
 
 app.use(cors({
@@ -48,7 +49,7 @@ const sessionOptions = {
 if (process.env.NODE_ENV !== "development") {
     sessionOptions.proxy = true;
     sessionOptions.cookie = {
-        sameSite: "none",
+        sameSite: "lax",
         secure: true,
         domain: process.env.NODE_SERVER_DOMAIN,
     };
