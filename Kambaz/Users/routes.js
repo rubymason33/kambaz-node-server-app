@@ -82,44 +82,43 @@ export default function UserRoutes(app) {
         await enrollmentsDao.enrollUserInCourse(currentUser._id, newCourse._id);
         res.json(newCourse);
     };
-    // const findCoursesForUser = async (req, res) => {
-    //     const currentUser = req.session["currentUser"];
-    //     if (!currentUser) {
-    //         res.sendStatus(401);
-    //         return;
-    //     }
-    //     if (currentUser.role === "ADMIN") {
-    //         const courses = await courseDao.findAllCourses();
-    //         res.json(courses);
-    //         return;
-    //     }
-    //     let { uid } = req.params;
-    //     if (uid === "current") {
-    //         uid = currentUser._id;
-    //     }
-    //     const courses = await enrollmentsDao.findCoursesForUser(uid);
-    //     res.json(courses);
-    // };
     const findCoursesForUser = async (req, res) => {
         const currentUser = req.session["currentUser"];
         if (!currentUser) {
             res.sendStatus(401);
             return;
         }
-        let { uid } = req.params;
-        if (uid === "current") {
-            uid = currentUser._id;
-        }
-        // ADMINs get all courses regardless of UID
-        // SHOULD THIS BE FACULTY OR ADMIN????
-        if (currentUser.role === "FACULTY") {
+        if (currentUser.role === "ADMIN") {
             const courses = await courseDao.findAllCourses();
             res.json(courses);
             return;
         }
+        let { uid } = req.params;
+        if (uid === "current") {
+            uid = currentUser._id;
+        }
         const courses = await enrollmentsDao.findCoursesForUser(uid);
         res.json(courses);
     };
+    // const findCoursesForUser = async (req, res) => {
+    //     const currentUser = req.session["currentUser"];
+    //     if (!currentUser) {
+    //         res.sendStatus(401);
+    //         return;
+    //     }
+    //     let { uid } = req.params;
+    //     if (uid === "current") {
+    //         uid = currentUser._id;
+    //     }
+    //     // ADMINs get all courses regardless of UID
+    //     if (currentUser.role === "ADMIN") {
+    //         const courses = await courseDao.findAllCourses();
+    //         res.json(courses);
+    //         return;
+    //     }
+    //     const courses = await enrollmentsDao.findCoursesForUser(uid);
+    //     res.json(courses);
+    // };
 
     const enrollUserInCourse = async (req, res) => {
         let { uid, cid } = req.params;
