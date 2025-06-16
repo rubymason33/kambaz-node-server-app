@@ -15,10 +15,15 @@ export async function createCourse(course) {
     return model.create(newCourse);
 }
 // handle enrollments in the course of deletion
+// export async function deleteCourse(courseId) {
+//     await EnrollmentModel.deleteMany({ course: courseId });
+//     return model.deleteOne({ _id: courseId });
+// }
 export async function deleteCourse(courseId) {
     await EnrollmentModel.deleteMany({ course: courseId });
-    return model.deleteOne({ _id: courseId });
+    return model.findByIdAndDelete(courseId);
 }
+
 export async function updateCourse(courseId, courseUpdates) {
     return model.updateOne({ _id: courseId }, { $set: courseUpdates });
 }

@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import Enrollment from "../Enrollments/model.js";
+
 const userSchema = new mongoose.Schema({
     _id: String,
     username: { type: String, required: true, unique: true },
@@ -19,5 +21,14 @@ const userSchema = new mongoose.Schema({
     },
     { collection: "users" }
 );
+
+// delete enrollments involving a delted user
+userSchema.post("findOneAndDelete", async function (doc) {
+    if (doc) {
+        await Enrollment.deleteMany({ user: doc._id });
+        console.log(`Deleted enrollments for user ${doc._id}`);
+    }
+});
+
 export default userSchema;
 
