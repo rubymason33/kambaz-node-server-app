@@ -111,7 +111,8 @@ export default function UserRoutes(app) {
             uid = currentUser._id;
         }
         // ADMINs get all courses regardless of UID
-        if (currentUser.role === "ADMIN") {
+        // SHOULD THIS BE FACULTY OR ADMIN????
+        if (currentUser.role === "FACULTY") {
             const courses = await courseDao.findAllCourses();
             res.json(courses);
             return;

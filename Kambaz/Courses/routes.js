@@ -18,6 +18,7 @@ export default function CourseRoutes(app) {
     app.post("/api/courses", async (req, res) => {
         const course = await dao.createCourse(req.body);
         const currentUser = req.session["currentUser"];
+        // auto-enroll the user that created it
         if (currentUser) {
             await enrollmentsDao.enrollUserInCourse(currentUser._id, course._id);
         }
